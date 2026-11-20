@@ -1,56 +1,137 @@
-# Welcome to your Expo app 👋
+<div align="center">
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+<img src="docs/screenshots/01-commands.png" alt="ShellDeck command list" width="220">
 
-## Get started
+# ShellDeck
 
-1. Install dependencies
+**A fast, offline command cheatsheet for Linux, bash, zsh, fish and csh.**
 
-   ```bash
-   npm install
-   ```
+476 commands and 840 copy-ready examples, with instant search, shell filters and a side-by-side comparison of how each shell does the same job.
 
-2. Start the app
+![Expo](https://img.shields.io/badge/Expo_SDK-58-000020?logo=expo&logoColor=white)
+![React Native](https://img.shields.io/badge/React_Native-0.88-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-19_passing-2E9E5B)
+![Platforms](https://img.shields.io/badge/platforms-iOS_%7C_Android-lightgrey)
 
-   ```bash
-   npx expo start
-   ```
+</div>
 
-In the output, you'll find options to open the app in a
+---
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Screenshots
 
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/01-commands.png" width="200"><br><sub><b>476 commands</b></sub></td>
+    <td align="center"><img src="docs/screenshots/02-search.png" width="200"><br><sub><b>Instant search</b></sub></td>
+    <td align="center"><img src="docs/screenshots/03-command.png" width="200"><br><sub><b>Syntax and copyable examples</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/04-careful.png" width="200"><br><sub><b>Warnings on dangerous commands</b></sub></td>
+    <td align="center"><img src="docs/screenshots/05-fish.png" width="200"><br><sub><b>Filter by shell</b></sub></td>
+    <td align="center"><img src="docs/screenshots/06-compare.png" width="200"><br><sub><b>Compare shells side by side</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/07-speed.png" width="200"><br><sub><b>Built-in speed test</b></sub></td>
+    <td align="center"><img src="docs/screenshots/08-zsh.png" width="200"><br><sub><b>Shell-specific features</b></sub></td>
+    <td align="center"><img src="docs/screenshots/09-light.png" width="200"><br><sub><b>Light mode</b></sub></td>
+  </tr>
+</table>
 
-## Get a fresh project
+## What's inside
 
-When you're ready, run:
+| Shell | Commands | Covers |
+|---|---|---|
+| **Linux** | 288 | Files, text, search, permissions, users, processes, system info, disks, archives, networking, packages, services, Git, Docker, terminal tools, kernel |
+| **Bash** | 78 | Variables, quoting and expansion, redirection, control flow, functions and scripts, jobs and history, keyboard shortcuts |
+| **Zsh** | 35 | Setup and options, recursive globbing and glob qualifiers, 1-based arrays and parameter flags, zsh-only tricks |
+| **Fish** | 38 | `set` variables, control flow, functions and abbreviations, autosuggestions and history |
+| **Csh/Tcsh** | 37 | `set`/`setenv`, `@` arithmetic, variable modifiers, `foreach`, csh redirection |
 
-```bash
-npm run reset-project
+Plus **34 everyday tasks compared across bash, zsh, fish and csh**: setting variables, PATH, loops, functions, string tricks, redirection and more.
+
+## Features
+
+- ⚡ **Instant search** that ranks by command name, then by what the command does ("disk space" finds `df` and `du`)
+- 🐚 **Filter by shell and category**
+- 📋 **Copy any example** with one tap (with haptic feedback)
+- ⚠️ **Warnings** on commands that can delete data or stop a system (`rm -rf`, `dd`, `mkfs`…)
+- 🔖 **Saved commands** and recently viewed, kept on your phone
+- 🔀 **Compare tab**: the same job in four shells
+- 🌗 **Dark terminal theme** with light mode
+- ✈️ **Fully offline**: everything is bundled in the app
+
+## How fast is it?
+
+The About tab has a speed test you can run on your own phone. In a browser on a MacBook:
+
+| | Time |
+|---|---|
+| Load and index all 476 commands at startup | ~1 ms |
+| Average search | **0.075 ms** |
+| Slowest single search | 0.3 ms |
+
+One screen refresh takes about 16 ms, so a search costs well under 1% of a frame. How:
+
+- Commands are written in a compact text format (`name :: summary :: syntax`, with indented examples) and parsed once at startup into objects with **pre-lowercased search fields**.
+- Search is a single scan with early exit: every word must match, and name matches score higher than description matches.
+- The list uses **fixed-height rows** (`getItemLayout`), memoised rows and `useDeferredValue`, so typing stays smooth while results update.
+
+## Project structure
+
+```text
+src/
+├── app/                    # Expo Router screens
+│   ├── (tabs)/             # Commands, Compare, Saved, About
+│   └── command/[id].tsx    # Command detail
+├── data/
+│   ├── sheets/             # The commands, one plain-text sheet per shell
+│   ├── commands.ts         # Sheet parser + index
+│   └── compare.ts          # Side-by-side shell table
+├── lib/search.ts           # Ranking search
+├── state/store.tsx         # Saved + recent (AsyncStorage)
+└── components/ui.tsx       # Rows, chips, code lines
+__tests__/                  # Data checks, search speed, and full app flows
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+### Adding a command
 
-### Other setup steps
+Add it to the right sheet in `src/data/sheets/`:
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+```text
+## Networking
+ping :: Check if a host is reachable :: ping [-c N] host
+  ping -c 4 google.com :: Send 4 pings, then stop
+```
 
-## Learn more
+Add ` :: !` after the syntax to mark a command as dangerous. The tests check that every command has a summary, syntax and at least one example, and that ids are unique.
 
-To learn more about developing your project with Expo, look at the following resources:
+## Getting started
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+git clone https://github.com/tejHacks/shelldeck.git
+cd shelldeck
+npm install
+npx expo start        # scan the QR code with Expo Go, or press i / a
+```
 
-## Join the community
+```bash
+npm test              # 19 tests: data, search speed, app flows
+npm run typecheck
+npx expo lint
+```
 
-Join our community of developers creating universal apps.
+## Roadmap
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- [ ] Android and iOS store builds
+- [ ] More shells: PowerShell and nushell
+- [ ] "Explain this command": paste a command and see each part explained
+- [ ] Home-screen widget with a command of the day
+
+## Author
+
+**Olateju Olamide Emmanuel**: mobile developer (Flutter · React Native · Swift · Laravel)
+
+- GitHub: [@tejHacks](https://github.com/tejHacks)
+
+If ShellDeck saved you a trip to the man pages, please ⭐ the repo!
