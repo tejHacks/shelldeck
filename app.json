@@ -8,7 +8,7 @@
     "scheme": "shelldeck",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon",
+      "icon": "./assets/images/icon.png",
       "bundleIdentifier": "com.olateju.shelldeck",
       "supportsTablet": true
     },
