@@ -8,6 +8,7 @@
 
 476 commands and 840 copy-ready examples, with instant search, shell filters and a side-by-side comparison of how each shell does the same job.
 
+[![CI](https://github.com/tejHacks/shelldeck/actions/workflows/ci.yml/badge.svg)](https://github.com/tejHacks/shelldeck/actions/workflows/ci.yml)
 ![Expo](https://img.shields.io/badge/Expo_SDK-58-000020?logo=expo&logoColor=white)
 ![React Native](https://img.shields.io/badge/React_Native-0.88-61DAFB?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
